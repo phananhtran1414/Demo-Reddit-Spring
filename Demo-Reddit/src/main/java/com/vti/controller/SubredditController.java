@@ -18,7 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/subreddit")
+@RequestMapping("/api/subreddit/")
 @AllArgsConstructor
 @Slf4j
 public class SubredditController {
@@ -43,7 +43,8 @@ public class SubredditController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id){
-		return ResponseEntity.status(HttpStatus.OK)
+		return ResponseEntity
+				.status(HttpStatus.OK)
 				.body(subredditService.getSubreddit(id));
 	}
 	

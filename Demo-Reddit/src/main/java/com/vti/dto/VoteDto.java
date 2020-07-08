@@ -1,6 +1,6 @@
 package com.vti.dto;
 
-import java.time.Instant;
+import com.vti.model.VoteType;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
+public class VoteDto {
 	
-	private String authenticationToken;
-	private String refreshToken;
-	private Instant expiresAt;
-	private String username;
+	private VoteType voteType;
+	private Long postId;
 	
 }

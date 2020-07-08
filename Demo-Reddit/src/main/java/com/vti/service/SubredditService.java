@@ -24,11 +24,10 @@ import lombok.extern.slf4j.Slf4j;
 public class SubredditService {
 
 	private final SubredditRepository repo;
-	private final SubredditMapper subredditMapper;
 	
 	@Transactional
 	public SubredditDto save(SubredditDto subredditDto) {
-		Subreddit subreddit = subredditMapper.mapDtoToSubreddit(subredditDto);
+		Subreddit subreddit = mapDtoToSubreddit(subredditDto);
 		Subreddit save = repo.save(subreddit);
 		
 		subredditDto.setId(save.getId());
@@ -43,7 +42,7 @@ public class SubredditService {
 		// Convert to SubredditDTO rồi đổi sang List
 		return repo.findAll()
 				.stream()
-				.map(subredditMapper::mapSubredditToDto)
+				.map(this::mapToDto)
 				.collect(Collectors.toList());
 		
 	}
@@ -54,21 +53,21 @@ public class SubredditService {
 		
 		Subreddit subreddit = repo.findById(id).orElseThrow(() -> new SpringRedditException("No subreddit found with ID - " + id));
 		
-		return subredditMapper.mapSubredditToDto(subreddit);
+		return mapToDto(subreddit);
 	}
 	
-//	private Subreddit mapSubredditDto(SubredditDto subredditDto) {
-//		return Subreddit.builder()
-//				.name(subredditDto.getName())
-//				.description(subredditDto.getDescription())
-//				.build();
-//	}
-//	
-//	private SubredditDto mapToDto(Subreddit subreddit) {
-//		return SubredditDto.builder()
-//				.name(subreddit.getName())
-//				.id(subreddit.getId())
-//				.numberOfPosts(subreddit.getPosts().size())
-//				.build();
-//	}
+	private Subreddit mapDtoToSubreddit(SubredditDto subredditDto) {
+		return Subreddit.builder()
+				.name(subredditDto.getName())
+				.description(subredditDto.getDescription())
+				.build();
+	}
+	
+	private SubredditDto mapToDto(Subreddit subreddit) {
+		return SubredditDto.builder()
+				.name(subreddit.getName())
+				.id(subreddit.getId())
+				.numberOfPosts(subreddit.getPosts().size())
+				.build();
+	}
 }

@@ -26,7 +26,7 @@ public class JwtProvider {
 	private KeyStore keyStore;
 	
     @Value("${jwt.expiration.time}")
-    private Long jwtExpirationInMillis;
+    private Long jwtExpirationInMillis; //// Refresh Token
 
     @PostConstruct
     public void init() {
@@ -95,7 +95,7 @@ public class JwtProvider {
         return claims.getSubject();
     }
 
-    
+    //// Refresh Token
     public Long getJwtExpirationInMillis() {
         return jwtExpirationInMillis;
     }

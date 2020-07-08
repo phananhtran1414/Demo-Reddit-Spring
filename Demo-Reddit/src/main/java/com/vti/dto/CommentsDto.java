@@ -8,14 +8,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class AuthenticationResponse {
+public class CommentsDto {
+	private Long id;
+	private Long postId;
+	private Instant createdDate;
+	private String text;
+	private String userName;
 	
-	private String authenticationToken;
-	private String refreshToken;
-	private Instant expiresAt;
-	private String username;
 	
 }

@@ -1,5 +1,7 @@
 package com.vti.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,19 +13,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.dto.AuthenticationResponse;
 import com.vti.dto.LoginRequest;
+import com.vti.dto.RefreshTokenRequest;
 import com.vti.dto.RegisterRequest;
+import com.vti.model.RefreshToken;
 import com.vti.service.AuthService;
+import com.vti.service.RefreshTokenService;
 
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/api/auth")
+@RequestMapping("/api/auth/")
 @AllArgsConstructor
 public class AuthController {
 	
 	private final AuthService authService;
+	private final RefreshTokenService refreshTokenService;
 	
-	@PostMapping("/sign-up")
+	@PostMapping("sign-up")
 	public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
 		
 		authService.signup(registerRequest);
@@ -31,19 +37,32 @@ public class AuthController {
 		return new ResponseEntity<>("User Registration Successful" , HttpStatus.OK);
 	}
 	
-	@GetMapping("/accountVerification/{token}")
+	@GetMapping("accountVerification/{token}")
 	public ResponseEntity<String> verifyAccount(@PathVariable String token){
 		
 		authService.verifyAccount(token);
 		
-		return new ResponseEntity<>("Account Activated Success",HttpStatus.OK);
+		return ResponseEntity.status(HttpStatus.OK).body("Account Activated Success");
 	}
 	
-	@PostMapping("/login")
+	@PostMapping("login")
 	public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) {
 		
 		return authService.login(loginRequest);
 		
+	}
+	
+	@PostMapping("refresh/token")
+	 public AuthenticationResponse refresheTokens(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+		return authService.refreshToken(refreshTokenRequest);
+	}
+	
+	
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest){
+		refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
+		
+		return ResponseEntity.status(HttpStatus.OK).body("Refresh Token Deleted Success!");
 	}
 	
 //	@GetMapping("/hello")
